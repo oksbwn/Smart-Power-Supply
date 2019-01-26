@@ -82,58 +82,57 @@
               </div>
               <div class="card-footer">
                 <div class="stats">
-                  <i class="fa fa-info"></i>  Lst update Time:  <label id="update_time"></label>
+                  <i class="fa fa-info"></i>Last update Time:  <label id="update_time"></label>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-12">
             <div class="card card-chart">
               <div class="card-header card-header-success">
-                <div class="ct-chart" id="dailySalesChart"></div>
+                  <div id="power_chart" class="ct-chart"></div>
               </div>
               <div class="card-body">
-                <h4 class="card-title">Daily Sales</h4>
-                <p class="card-category">
-                  <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase in today sales.</p>
+                <h4 class="card-title">Power</h4>
+                <p class="card-category">Variation in latest session.</p>
               </div>
               <div class="card-footer">
                 <div class="stats">
-                  <i class="material-icons">access_time</i> updated 4 minutes ago
+                  <i class="material-icons">access_time</i>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-6">
             <div class="card card-chart">
               <div class="card-header card-header-warning">
-                <div class="ct-chart" id="websiteViewsChart"></div>
+                <div class="ct-chart" id="voltage_chart"></div>
               </div>
               <div class="card-body">
-                <h4 class="card-title">Email Subscriptions</h4>
-                <p class="card-category">Last Campaign Performance</p>
+                <h4 class="card-title">Voltage</h4>
+                <p class="card-category">Variation in latest session.</p>
               </div>
               <div class="card-footer">
                 <div class="stats">
-                  <i class="material-icons">access_time</i> campaign sent 2 days ago
+                  <i class="material-icons">access_time</i>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-6">
             <div class="card card-chart">
               <div class="card-header card-header-danger">
-                <div class="ct-chart" id="completedTasksChart"></div>
+                <div class="ct-chart" id="current_chart"></div>
               </div>
               <div class="card-body">
-                <h4 class="card-title">Completed Tasks</h4>
-                <p class="card-category">Last Campaign Performance</p>
+                <h4 class="card-title">Current</h4>
+                <p class="card-category">Variation in latest session.</p>
               </div>
               <div class="card-footer">
                 <div class="stats">
-                  <i class="material-icons">access_time</i> campaign sent 2 days ago
+                  <i class="material-icons">access_time</i>
                 </div>
               </div>
             </div>
@@ -186,7 +185,11 @@
   <script src="assets/js/material-dashboard.js?v=2.1.1" type="text/javascript"></script>
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <script src="assets/demo/demo.js"></script>
-  <script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js" integrity="sha256-oSgtFCCmHWRPQ/JmR4OoZ3Xke1Pw4v50uh6pLcu+fIc=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+ <script>
     $(document).ready(function() {
       // Javascript method's body can be found in assets/js/demos.js
       md.initDashboardPageCharts();
@@ -212,8 +215,73 @@
           setTimeout(relaTimeData, 2000);
         }
       });
+
+      
       
     }
+  </script>
+  <script>
+    $(document).ready(function() {
+      $.ajax({
+        url: 'http://192.168.0.7/smps/rawData.php?TYPE=4' ,
+        type: 'get',
+        // data: fd,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+          var obj = JSON.parse(response);
+          var powerData=[];
+          var voltageData=[];
+          var currentData=[];
+          
+          for (var i = 0; i < obj.length; i++){
+            var hash = {};var hash1 = {};var hash2 = {};
+            if(i%10==0){
+              hash['year'] =obj[i].time;
+              hash['value'] = obj[i].op;    
+              powerData.push(hash);
+              hash1['year'] =obj[i].time;
+              hash1['value'] = obj[i].oa; 
+              currentData.push(hash1);  
+              hash2['year'] =obj[i].time;
+              hash2['value'] = obj[i].ov; 
+              voltageData.push(hash2);  
+            }
+          }
+          console.log(currentData);
+          new Morris.Line({
+          element: 'power_chart',
+          data: powerData,
+          xkey: 'year',
+          ykeys: ['value'],
+          labels: ['Value'],
+          lineColors: ['#ffffff'],
+          pointSize: 0,
+          gridTextColor:'#000000'
+        });
+        new Morris.Line({
+          element: 'current_chart',
+          data: currentData,
+          xkey: 'year',
+          ykeys: ['value'],
+          labels: ['Value'],
+          lineColors: ['#ffffff'],
+          pointSize: 0,
+          gridTextColor:'#000000'
+        });
+        new Morris.Line({
+          element: 'voltage_chart',
+          data: voltageData,
+          xkey: 'year',
+          ykeys: ['value'],
+          labels: ['Value'],
+          lineColors: ['#ffffff'],
+          pointSize: 0,
+          gridTextColor:'#000000'
+        });
+        }
+      });
+    });
   </script>
 </body>
 </html>

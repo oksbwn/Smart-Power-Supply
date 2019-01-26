@@ -5,10 +5,10 @@
         $res=$dbObject-> executeQuery('SELECt * FROM `dps5015` ORDER BY `sl_no` DESC LIMIT 1');   
            
     if($_GET['TYPE']==2) //Return data of today
-        $res=$dbObject-> executeQuery('SELECt * FROM `dps5015` WHERE `d5logtime` LIKE \''.$_GET['QRY'].' %\'  ORDER BY `sl_no` DESC');
+        $res=$dbObject-> executeQuery('SELECt * FROM `dps5015` WHERE `d5logtime` LIKE \''.$_GET['QRY'].' %\'  ORDER BY `sl_no` DESC LIMIT 1000');
 
     if($_GET['TYPE']==3) //Resturn data of a session
-        $res=$dbObject-> executeQuery('SELECt * FROM `dps5015` WHERE `d5session`='.$_GET['QRY'].' ORDER BY `sl_no` DESC');    
+        $res=$dbObject-> executeQuery('SELECt * FROM `dps5015` WHERE `d5session`='.$_GET['QRY'].' ORDER BY `sl_no` DESC LIMIT 1000');    
 
     if($_GET['TYPE']==4) //Return data of latest session
         {
