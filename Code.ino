@@ -8,6 +8,9 @@
 
 #define OUPUT_LED 5
 #define INPUT_SWITCH 4
+#define RX_PIN 12
+#define TX_PIN 13
+
 const char * ssid = "home_wg";
 const char * password = "omisoksbwn";
 
@@ -18,7 +21,6 @@ IPAddress gateway_dns(192, 168, 0, 1);
 uint16_t au16data[16];
 uint8_t u8state;
 
-
 Modbus master(0); // this is master and RS-232 or USB-FTDI via software serial
 
 /**
@@ -28,8 +30,7 @@ modbus_t telegram;
 
 unsigned long u32wait;
 
-//SoftwareSerial mySerial(3, 5);//Create a SoftwareSerial object so that we can use software serial. Search "software serial" on Arduino.cc to find out more details.
-SoftwareSerial mySerial(12, 13);
+SoftwareSerial mySerial(RX_PIN, TX_PIN);
 
 
 void setup_wifi() {
