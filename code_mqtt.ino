@@ -12,8 +12,8 @@
 #define TX_PIN 13
 
 String ip_address = "91";
-const char * ssid = "home_wg";
-const char * password = "omisoksbwn";
+const char * ssid = "*******";
+const char * password = "**********";
 
 IPAddress ip(192, 168, 0, ip_address.toInt());
 IPAddress gateway_dns(192, 168, 0, 1);
@@ -101,14 +101,16 @@ void reconnect()
     }
 }
 void loop() {
-      if (!client.connected())
+   if (!client.connected())
     {
         reconnect();
     }
-  while (!digitalRead(INPUT_SWITCH)) {
+  if (!digitalRead(INPUT_SWITCH)) {
+    yield();
     switch ( u8state ) {
       case 0:
-        if (millis() > u32wait) u8state++; // wait state
+        if (millis() > u32wait) 
+          u8state++; // wait state
         break;
       case 1:
         power_device.u8id = 1; // slave address
@@ -144,6 +146,8 @@ void loop() {
     }
     digitalWrite(OUPUT_LED, LOW);
   }
+  else
+    delay(4000);
   client.loop();
 }
 char *getCharArray(String text)
