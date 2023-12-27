@@ -1,9 +1,9 @@
 ### Connected Power Supply with logging to webserver.
 
 
+[![](/Snapshots/video.png)](https://bit.ly/41K1Vx9)
 
-
-Video Link: [VIDEO](https://bit.ly/41K1Vx9)
+Video Link: [[VIDEO](https://bit.ly/41K1Vx9)](https://bit.ly/41K1Vx9)
 
 ### Arduino Libraries: 
 
